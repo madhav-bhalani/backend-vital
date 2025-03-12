@@ -20,13 +20,81 @@ seedProducts = [
             flavours: ['chocolate', 'mango']
         },
         sizes: {
-            weight: [500,1000]
+            weight: [500, 1000]
         },
         stock: {
-            quantity: 4,
+            quantity: 4
         },
-        price:{
+        price: {
             productPrice: 2500
+        }
+    },
+    {
+        productName: 'Mass Gainer Xtreme',
+        brandName: 'Optimum Nutrition',
+        category: 'gainer',
+        productDetails: {
+            flavours: ['strawberry', 'chocolate']
+        },
+        sizes: {
+            weight: [1000, 2000]
+        },
+        stock: {
+            quantity: 10
+        },
+        price: {
+            productPrice: 3500
+        }
+    },
+    {
+        productName: 'Pre-Workout Boost',
+        brandName: 'Cellucor C4',
+        category: 'pre post workout',
+        productDetails: {
+            flavours: ['mango', 'unflavoured']
+        },
+        sizes: {
+            weight: [250, 500]
+        },
+        stock: {
+            quantity: 6
+        },
+        price: {
+            productPrice: 1800
+        }
+    },
+    {
+        productName: 'Multivitamin Pro',
+        brandName: 'GNC',
+        category: 'vitamin supplement',
+        productDetails: {
+            flavours: ['unflavoured']
+        },
+        sizes: {
+            weight: [500, 1000]
+        },
+        stock: {
+            quantity: 8
+        },
+        price: {
+            productPrice: 1200
+        }
+    },
+    {
+        productName: 'VitalGear Performance T-Shirt',
+        brandName: 'VitalGear',
+        category: 'active wear',
+        productDetails: {
+            colors: ['black', 'grey']
+        },
+        sizes: {
+            shirtSize: ['m', 'l', 'xl']
+        },
+        stock: {
+            quantity: 20
+        },
+        price: {
+            productPrice: 899
         }
     }
 ];

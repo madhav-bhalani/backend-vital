@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+</head>
+<body>
+    <div>
+        <% results.forEach(product => { %>
+            <div>
+                <h2><%=product.brandName + " " + product.productName %></h2>
+                <ul>
+                    <li><b>Price: $</b><%=product.price.productPrice%></li>
+                    <li><b>Rating: </b><%=product.rating%>/5</li>
+                    <li><b>Catrgory: </b><%=product.category%></li>
+                    <li><b>Stock: </b><%=product.stock.quantity%></li>
+                </ul>
+            </div> 
+        <% }) %>
+    </div>
+</body>
+</html>
