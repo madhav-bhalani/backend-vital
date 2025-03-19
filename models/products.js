@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const productSchema = new mongoose.Schema({
+const productSchema = new Schema({
     productName: {
         type: String,
         required: true,
@@ -45,6 +46,14 @@ const productSchema = new mongoose.Schema({
             enum: [250, 500, 1000, 2000, 4000],
             required: function() { return ['protein', 'gainer', 'pre post workout', 'vitamin supplement'].includes(this.category); } // Only for supplements
         }       
+    },
+    images: {
+        displayImage: {
+            type: String
+        },
+        sliderImages: {
+            type: [String]
+        }
     },
     rating: {
         type: Number,

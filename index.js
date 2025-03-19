@@ -4,7 +4,9 @@ const port = 3000;
 const path = require('path');
 const Product = require('./models/products')
 const mongoose = require('mongoose');
+const cors = require('cors');
 
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
 app.set('views', path.join(__dirname, 'views'));
@@ -19,7 +21,21 @@ mongoose.connect('mongodb://127.0.0.1:27017/vital-gear')
     console.log(err);
 });
 
+//display Products
+app.get('/displayProducts/:ctg', async(req,res)=>{
+    try{
+        const category = req.params.ctg;
+        const products = await Product.find({category: category});
+        res.json(products);
+    }
+    catch(err){
+        console.log('ERROR IN DISPLAYING PRODUCTS')
+        console.log(err);
+    }
+})
 
+
+//search route
 app.get('/search', (req,res)=>{
     res.render('search');
 });

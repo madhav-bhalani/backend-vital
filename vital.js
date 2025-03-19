@@ -13,11 +13,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/vital-gear')
 
 seedProducts = [
     {
-        productName: 'Bizoyme Performance Whey',
-        brandName: 'Muscle Blaze',
-        category: 'protein',
+        productName: "Bizoyme Performance Whey",
+        brandName: "Muscle Blaze",
+        category: "protein",
         productDetails: {
-            flavours: ['chocolate', 'mango']
+            flavours: ["chocolate", "mango"]
         },
         sizes: {
             weight: [500, 1000]
@@ -27,77 +27,267 @@ seedProducts = [
         },
         price: {
             productPrice: 2500
+        },
+        images: {
+            displayImage: "/products/protein.jpg",
+            sliderImages: ["/products/protein.jpg", "/products/gainer.webp"]
         }
     },
     {
-        productName: 'Mass Gainer Xtreme',
-        brandName: 'Optimum Nutrition',
-        category: 'gainer',
+        productName: "Mass Gainer Elite",
+        brandName: "Optimum Nutrition",
+        category: "gainer",
         productDetails: {
-            flavours: ['strawberry', 'chocolate']
+            flavours: ["chocolate"]
         },
         sizes: {
             weight: [1000, 2000]
         },
         stock: {
-            quantity: 10
+            quantity: 6
         },
         price: {
-            productPrice: 3500
+            productPrice: 3200
+        },
+        images: {
+            displayImage: "/products/gainer.webp",
+            sliderImages: ["/products/gainer.webp", "/products/protein-isolate.jpg"]
         }
     },
     {
-        productName: 'Pre-Workout Boost',
-        brandName: 'Cellucor C4',
-        category: 'pre post workout',
+        productName: "Pre-Workout Explosion",
+        brandName: "MuscleTech",
+        category: "pre post workout",
         productDetails: {
-            flavours: ['mango', 'unflavoured']
+            flavours: ["strawberry"]
+        },
+        sizes: {
+            weight: [500]
+        },
+        stock: {
+            quantity: 10
+        },
+        price: {
+            productPrice: 1800
+        },
+        images: {
+            displayImage: "/products/on-supex-supplement.png",
+            sliderImages: ["/products/creatine.webp", "/products/protein.jpg"]
+        }
+    },
+    {
+        productName: "Daily Vitamin Boost",
+        brandName: "GNC",
+        category: "vitamin supplement",
+        productDetails: {
+            flavours: ["unflavoured"]
         },
         sizes: {
             weight: [250, 500]
         },
         stock: {
-            quantity: 6
+            quantity: 8
         },
         price: {
-            productPrice: 1800
+            productPrice: 2200
+        },
+        images: {
+            displayImage: "/products/vitamin.webp",
+            sliderImages: ["/products/vitamin.webp", "/products/on-supex-supplement.png"]
         }
     },
     {
-        productName: 'Multivitamin Pro',
-        brandName: 'GNC',
-        category: 'vitamin supplement',
+        productName: "VitalGear Compression Shirt",
+        brandName: "VitalGear",
+        category: "active wear",
         productDetails: {
-            flavours: ['unflavoured']
+            colors: ["black", "grey"]
+        },
+        sizes: {
+            shirtSize: ["m", "l", "xl"]
+        },
+        stock: {
+            quantity: 12
+        },
+        price: {
+            productPrice: 1500
+        },
+        images: {
+            displayImage: "/products/compression.webp",
+            sliderImages: ["/products/compression.webp", "/products/gainer.webp"]
+        }
+    },
+    {
+        productName: "Gold Standard Whey",
+        brandName: "Optimum Nutrition",
+        category: "protein",
+        productDetails: {
+            flavours: ["chocolate", "strawberry"]
+        },
+        sizes: {
+            weight: [500, 1000, 2000]
+        },
+        stock: {
+            quantity: 5
+        },
+        price: {
+            productPrice: 3000
+        },
+        images: {
+            displayImage: "/products/protein-isolate.jpg",
+            sliderImages: ["/products/protein.jpg", "/products/vitamin.webp"]
+        }
+    },
+    {
+        productName: "Isopure Zero Carb",
+        brandName: "Nature's Best",
+        category: "protein",
+        productDetails: {
+            flavours: ["unflavoured"]
+        },
+        sizes: {
+            weight: [1000]
+        },
+        stock: {
+            quantity: 7
+        },
+        price: {
+            productPrice: 3500
+        },
+        images: {
+            displayImage: "/products/protein.jpg",
+            sliderImages: ["/products/on-supex-supplement.png", "/products/creatine.webp"]
+        }
+    },
+    {
+        productName: "Hydro Whey Platinum",
+        brandName: "Optimum Nutrition",
+        category: "protein",
+        productDetails: {
+            flavours: ["mango"]
+        },
+        sizes: {
+            weight: [500, 2000]
+        },
+        stock: {
+            quantity: 3
+        },
+        price: {
+            productPrice: 4000
+        },
+        images: {
+            displayImage: "/products/protein-isolate.jpg",
+            sliderImages: ["/products/gainer.webp", "/products/protein.jpg"]
+        }
+    },
+    {
+        productName: "Dymatize Elite Whey",
+        brandName: "Dymatize",
+        category: "protein",
+        productDetails: {
+            flavours: ["strawberry"]
         },
         sizes: {
             weight: [500, 1000]
         },
         stock: {
-            quantity: 8
+            quantity: 9
         },
         price: {
-            productPrice: 1200
+            productPrice: 2800
+        },
+        images: {
+            displayImage: "/products/creatine.webp",
+            sliderImages: ["/products/creatine.webp", "/products/protein-isolate.jpg"]
         }
     },
     {
-        productName: 'VitalGear Performance T-Shirt',
-        brandName: 'VitalGear',
-        category: 'active wear',
+        productName: "NitroTech Whey Gold",
+        brandName: "MuscleTech",
+        category: "protein",
         productDetails: {
-            colors: ['black', 'grey']
+            flavours: ["chocolate", "mango"]
         },
         sizes: {
-            shirtSize: ['m', 'l', 'xl']
+            weight: [500, 2000, 4000]
         },
         stock: {
-            quantity: 20
+            quantity: 6
         },
         price: {
-            productPrice: 899
+            productPrice: 4200
+        },
+        images: {
+            displayImage: "/products/protein.jpg",
+            sliderImages: ["/products/protein.jpg", "/products/compression.webp"]
+        }
+    },
+    {
+        productName: "Rule 1 R1 Whey Blend",
+        brandName: "Rule 1",
+        category: "protein",
+        productDetails: {
+            flavours: ["chocolate"]
+        },
+        sizes: {
+            weight: [500, 1000, 2000]
+        },
+        stock: {
+            quantity: 10
+        },
+        price: {
+            productPrice: 3400
+        },
+        images: {
+            displayImage: "/products/protein-isolate.jpg",
+            sliderImages: ["/products/on-supex-supplement.png", "/products/protein.jpg"]
+        }
+    },
+    {
+        productName: "Impact Whey Protein",
+        brandName: "MyProtein",
+        category: "protein",
+        productDetails: {
+            flavours: ["strawberry", "unflavoured"]
+        },
+        sizes: {
+            weight: [500, 1000, 2000]
+        },
+        stock: {
+            quantity: 8
+        },
+        price: {
+            productPrice: 2700
+        },
+        images: {
+            displayImage: "/products/gainer.webp",
+            sliderImages: ["/products/gainer.webp", "/products/vitamin.webp"]
+        }
+    },
+    {
+        productName: "GNC Pro Performance Whey",
+        brandName: "GNC",
+        category: "protein",
+        productDetails: {
+            flavours: ["mango"]
+        },
+        sizes: {
+            weight: [500, 1000]
+        },
+        stock: {
+            quantity: 12
+        },
+        price: {
+            productPrice: 2600
+        },
+        images: {
+            displayImage: "/products/compression.webp",
+            sliderImages: ["/products/compression.webp", "/products/on-supex-supplement.png"]
         }
     }
 ];
+
+
 
 vitalProduct.insertMany(seedProducts) 
 .then(()=>{
