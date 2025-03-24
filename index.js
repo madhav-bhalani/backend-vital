@@ -113,7 +113,7 @@ app.post('/login', async(req,res)=>{
                     res.cookie('auth', token, {
                         httpOnly: true,
                         secure: true,
-                        sameSite: 'Strict'
+                        sameSite: 'Strict',
                     });
                     res.json({message: 'Logged in!!', user});
                 });
