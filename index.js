@@ -12,7 +12,6 @@ const jwt = require('jsonwebtoken');
 const key = 'santaClause90*32@@';
 
 
-
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 
@@ -41,6 +40,8 @@ app.get('/displayProducts/:ctg', async(req,res)=>{
         console.log(err);
     }
 })
+
+
 
 
 //search route
