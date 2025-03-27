@@ -26,7 +26,8 @@ seedProducts = [
             quantity: 4
         },
         price: {
-            productPrice: 2500
+            productPrice: 2500,
+            onSale: true
         },
         images: {
             displayImage: "/products/protein.jpg",
@@ -57,7 +58,28 @@ seedProducts = [
     {
         productName: "Pre-Workout Explosion",
         brandName: "MuscleTech",
-        category: "pre post workout",
+        category: "pre-workout",
+        productDetails: {
+            flavours: ["strawberry"]
+        },
+        sizes: {
+            weight: [500]
+        },
+        stock: {
+            quantity: 10
+        },
+        price: {
+            productPrice: 1800
+        },
+        images: {
+            displayImage: "/products/on-supex-supplement.png",
+            sliderImages: ["/products/creatine.webp", "/products/protein.jpg"]
+        }
+    },
+    {
+        productName: "Post-Workout Explosion",
+        brandName: "MuscleMadness",
+        category: "post-workout",
         productDetails: {
             flavours: ["strawberry"]
         },
@@ -78,7 +100,7 @@ seedProducts = [
     {
         productName: "Daily Vitamin Boost",
         brandName: "GNC",
-        category: "vitamin supplement",
+        category: "vitamin",
         productDetails: {
             flavours: ["unflavoured"]
         },
@@ -99,7 +121,7 @@ seedProducts = [
     {
         productName: "VitalGear Compression Shirt",
         brandName: "VitalGear",
-        category: "active wear",
+        category: "active-wear",
         productDetails: {
             colors: ["black", "grey"]
         },
@@ -131,7 +153,8 @@ seedProducts = [
             quantity: 5
         },
         price: {
-            productPrice: 3000
+            productPrice: 3000,
+            onSale: true
         },
         images: {
             displayImage: "/products/protein-isolate.jpg",
@@ -173,7 +196,8 @@ seedProducts = [
             quantity: 3
         },
         price: {
-            productPrice: 4000
+            productPrice: 4000,
+            onSale: false
         },
         images: {
             displayImage: "/products/protein-isolate.jpg",
@@ -288,6 +312,13 @@ seedProducts = [
 ];
 
 
+vitalProduct.deleteMany({})
+.then(()=>{
+    console.log('Deleted...');
+})
+.catch(err=>{
+    console.log(err);
+})
 
 vitalProduct.insertMany(seedProducts) 
 .then(()=>{

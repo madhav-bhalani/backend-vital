@@ -12,7 +12,7 @@ const productSchema = new Schema({
     },
     category: {
         type: String,
-        enum: ['protein', 'gainer', 'pre post workout', 'vitamin supplement', 'active wear'],
+        enum: ['protein', 'gainer', 'pre-workout', 'post-workout', 'vitamin', 'active-wear'],
         lowercase: true,
         required: true
     },
@@ -25,13 +25,13 @@ const productSchema = new Schema({
             type: [String],
             enum: ['white', 'black', 'red', 'navy blue', 'grey'],
             lowercase: true,
-            required: function() { return this.category === 'active wear'; } 
+            required: function() { return this.category === 'active-wear'; } 
         },
         flavours: {
             type: [String],
             enum: ['chocolate', 'strawberry', 'mango', 'unflavoured'],
             lowercase: true,
-            required: function() { return ['protein', 'gainer', 'pre post workout', 'vitamin supplement'].includes(this.category); } // Required only for supplements
+            required: function() { return ['protein', 'gainer', 'pre-workout', 'post-workout'].includes(this.category); } // Required only for supplements
         }
     },
     sizes: {
@@ -39,12 +39,12 @@ const productSchema = new Schema({
             type: [String], 
             enum: ['s', 'm', 'l', 'xl', '2xl'],
             lowercase: true,
-            required: function() { return this.category === 'active wear'; } 
+            required: function() { return this.category === 'active-wear'; } 
         },
         weight: {
             type: [Number], 
             enum: [250, 500, 1000, 2000, 4000],
-            required: function() { return ['protein', 'gainer', 'pre post workout', 'vitamin supplement'].includes(this.category); } // Only for supplements
+            required: function() { return ['protein', 'gainer', 'pre-workout', 'post-workout', 'vitamin'].includes(this.category); } // Only for supplements
         }       
     },
     images: {
