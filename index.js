@@ -106,18 +106,17 @@ app.post('/login', async(req,res)=>{
         else{
             const verifyPass = await bcrypt.compare(password, user.password);
             if(verifyPass){
-                jwt.sign({user}, key, (err, token)=>{
+                jwt.sign({user},key, {expiresIn: '1d'}, (err, token)=>{
                     if(err){
                         return res.status(500).send('something went wrong!!');
                     }
                     res.cookie('auth', token, {
                         httpOnly: true,
                         secure: false,
-                        maxAge: 50000,
                         sameSite: 'Lax',
                         // expires: new Date(Date.now() * 50000)
                     });
-                    res.json({message: 'Logged in!!', user});
+                    res.json({message: 'Logged in!!', token, user});
                 });
             }
             else{
@@ -132,7 +131,9 @@ app.post('/login', async(req,res)=>{
     }
 });
 
+//LOGOUT ROUTE
 
+ 
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
