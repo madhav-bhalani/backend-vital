@@ -1,95 +1,116 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const productSchema = new Schema({
-    productName: {
-        type: String,
-        required: true,
+  productName: {
+    type: String,
+    required: true,
+  },
+  brandName: {
+    type: String,
+    required: true,
+  },
+  category: {
+    type: String,
+    enum: [
+      "protein",
+      "gainer",
+      "pre-workout",
+      "post-workout",
+      "vitamin",
+      "active-wear",
+    ],
+    lowercase: true,
+    required: true,
+  },
+  productDetails: {
+    description: {
+      type: String,
+      default:
+        "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Provident aliquam, libero recusandae sapiente reprehenderit, atque perspiciatis fuga, voluptate in iste dolor minima id.",
     },
-    brandName: {
-        type: String,
-        required: true,
+    colors: {
+      type: [String],
+      enum: ["white", "black", "red", "navy blue", "grey"],
+      lowercase: true,
+      required: function () {
+        return this.category === "active-wear";
+      },
     },
-    category: {
-        type: String,
-        enum: ['protein', 'gainer', 'pre-workout', 'post-workout', 'vitamin', 'active-wear'],
-        lowercase: true,
-        required: true
+    flavours: {
+      type: [String],
+      enum: ["chocolate", "strawberry", "mango", "unflavoured"],
+      lowercase: true,
+      required: function () {
+        return ["protein", "gainer", "pre-workout", "post-workout"].includes(
+          this.category
+        );
+      }, // Required only for supplements
     },
-    productDetails: {
-        description: {
-            type: String,
-            default: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Provident aliquam, libero recusandae sapiente reprehenderit, atque perspiciatis fuga, voluptate in iste dolor minima id.'
-        },
-        colors: {
-            type: [String],
-            enum: ['white', 'black', 'red', 'navy blue', 'grey'],
-            lowercase: true,
-            required: function() { return this.category === 'active-wear'; } 
-        },
-        flavours: {
-            type: [String],
-            enum: ['chocolate', 'strawberry', 'mango', 'unflavoured'],
-            lowercase: true,
-            required: function() { return ['protein', 'gainer', 'pre-workout', 'post-workout'].includes(this.category); } // Required only for supplements
-        }
+  },
+  sizes: {
+    shirtSize: {
+      type: [String],
+      enum: ["s", "m", "l", "xl", "2xl"],
+      lowercase: true,
+      required: function () {
+        return this.category === "active-wear";
+      },
     },
-    sizes: {
-        shirtSize: {
-            type: [String], 
-            enum: ['s', 'm', 'l', 'xl', '2xl'],
-            lowercase: true,
-            required: function() { return this.category === 'active-wear'; } 
-        },
-        weight: {
-            type: [Number], 
-            enum: [250, 500, 1000, 2000, 4000],
-            required: function() { return ['protein', 'gainer', 'pre-workout', 'post-workout', 'vitamin'].includes(this.category); } // Only for supplements
-        }       
+    weight: {
+      type: [Number],
+      enum: [250, 500, 1000, 2000, 4000],
+      required: function () {
+        return [
+          "protein",
+          "gainer",
+          "pre-workout",
+          "post-workout",
+          "vitamin",
+        ].includes(this.category);
+      }, // Only for supplements
     },
-    images: {
-        displayImage: {
-            type: String
-        },
-        sliderImages: {
-            type: [String]
-        }
+  },
+  images: [
+    {
+      url: String,
+      fileName: String,
     },
-    rating: {
-        type: Number,
-        min: 0,
-        max: 5,
-        default: 0 
+  ],
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5,
+    default: 0,
+  },
+  stock: {
+    inStock: {
+      type: Boolean,
+      default: true,
     },
-    stock: {
-        inStock: {
-            type: Boolean,
-            default: true
-        },
-        quantity: {
-            type: Number,
-            min: 0,
-            required: true
-        }
+    quantity: {
+      type: Number,
+      min: 0,
+      required: true,
     },
-    price: {
-        productPrice: {
-            type: Number,
-            required: true,
-            min: 0
-        },
-        onSale: {
-            type: Boolean,
-            default: false
-        }
+  },
+  price: {
+    productPrice: {
+      type: Number,
+      required: true,
+      min: 0,
     },
-    createdAt: { 
-        type: Date,
-        default: Date.now
-    }
+    onSale: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
-
-const vitalProduct = mongoose.model('Product', productSchema);
+const vitalProduct = mongoose.model("Product", productSchema);
 
 module.exports = vitalProduct;

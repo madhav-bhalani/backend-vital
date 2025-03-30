@@ -7,13 +7,14 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const User = require("./models/users");
-
 const jwt = require("jsonwebtoken");
 const key = "santaClause90*32@@";
 
+const productRoutes = require("./routes/products");
+
 const corsOptions = {
-  origin: 'http://localhost:5173', // Replace with your specific origin
-  credentials: true
+  origin: "http://localhost:5173", // Replace with your specific origin
+  credentials: true,
   // optionsSuccessStatus: 200
 };
 
@@ -35,16 +36,7 @@ mongoose
   });
 
 //display Products
-app.get("/displayProducts/:ctg", async (req, res) => {
-  try {
-    const category = req.params.ctg;
-    const products = await Product.find({ category: category });
-    res.json(products);
-  } catch (err) {
-    console.log("ERROR IN DISPLAYING PRODUCTS");
-    console.log(err);
-  }
-});
+// app.get("/products/:ctg", products.displayProducts);
 
 //search route
 app.get("/search", (req, res) => {
@@ -136,6 +128,8 @@ app.post("/login", async (req, res) => {
 });
 
 //LOGOUT ROUTE
+
+app.use("/products", productRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
