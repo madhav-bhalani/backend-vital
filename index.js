@@ -18,6 +18,9 @@ const corsOptions = {
   // optionsSuccessStatus: 200
 };
 
+const cookieParser = require("cookie-parser");
+
+app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -36,22 +39,38 @@ mongoose
   });
 
 const reqAuth = async (req, res, next) => {
-    try {
-        const token = req.cookies.auth;
-        if (!token) {
-            return res.status(401).json({ error: "Unauthorized: No token provided" });
-        }
-        const decoded = jwt.verify(token, key);
-        const user = await User.findById(decoded.user._id);
-        if (!user) {
-            return res.status(401).json({ error: "Unauthorized: User not found" });
-        }
-        req.user = user;
-        next();
-    } catch (err) {
-        console.error("Authentication error:", err);
-        res.status(401).json({ error: "Unauthorized" });
+  try {
+    console.log(req.cookies);
+    const token = req.cookies.auth;
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized: No token provided" });
     }
+    const decoded = jwt.verify(token, key);
+    const user = await User.findById(decoded.user._id);
+    if (!user) {
+      return res.status(401).json({ error: "Unauthorized: User not found" });
+    }
+    req.user = user;
+    next();
+  } catch (err) {
+    console.error("Authentication error:", err);
+    res.status(401).json({ error: "Unauthorized" });
+  }
+};
+
+//check if user is admin
+const isAdmin = async (req, res, next) => {
+  try {
+    const { email, phone } = req.user;
+    if (email === "admin@admin.com" && phone === "123456790") {
+      next();
+    } else {
+      res.status(403).json({ error: "Forbidden: Admin access required" });
+    }
+  } catch (err) {
+    console.error("Authorization error:", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 //display Products
@@ -61,7 +80,6 @@ const reqAuth = async (req, res, next) => {
 app.get("/search", (req, res) => {
   res.render("search");
 });
-
 
 app.post("/searchResults", async (req, res) => {
   try {
@@ -111,10 +129,10 @@ app.post("/register", async (req, res) => {
 });
 
 //LOGIN ROUTE
-app.post("/login", async (req, res) => {
+app.post("/login", async (req, res, next) => {
   try {
     const { username, password } = req.body;
-    console.log("HG", username, password);
+    // console.log("HG", username, password);
     const user = await User.findOne({
       $or: [{ phone: username }, { email: username }],
     });
@@ -148,22 +166,20 @@ app.post("/login", async (req, res) => {
 });
 
 //LOGOUT ROUTE
-app.post('/logout', reqAuth, (req, res) => {
-    try {
-        res.clearCookie('auth', {
-            httpOnly: true,
-            secure: true,
-            sameSite: "Lax"
-        });
-        console.log('Logout successful');
-        res.status(200).json({ message: 'Logout successful' });
-    } catch (err) {
-        console.error('Logout error:', err);
-        res.status(500).json({ error: 'Logout failed' });
-    }
+app.post("/logout", reqAuth, (req, res, next) => {
+  try {
+    res.clearCookie("auth", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "Lax",
+    });
+    console.log("Logout successful");
+    res.status(200).json({ message: "Logout successful" });
+  } catch (err) {
+    console.error("Logout error:", err);
+    res.status(500).json({ error: "Logout failed" });
+  }
 });
-
-
 
 app.use("/products", productRoutes);
 
