@@ -1,9 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const products = require("../controllers/products");
+const multer = require('multer');
+const { storage } = require('../cloudinary/index');
 
-router.get("/:ctg", products.displayProducts);
+const upload = multer({
+    storage,
+    fileFilter: (req, file, cb) => {
+      const allowedFormats = ["jpeg", "png", "jpg", "webp"];
+      const fileExt = file.originalname.split(".").pop().toLowerCase();
+      if (allowedFormats.includes(fileExt)) {
+        cb(null, true);
+      } else {
+        cb(new Error("Invalid file format"), false);
+      }
+    },
+  }).fields([{ name: "productImages", maxCount: 10 }]);
 
-router.post('/new');
+router.get("/:ctg",products.displayProducts);
+
+router.post('/new', upload, products.addNewProduct);
 
 module.exports = router;

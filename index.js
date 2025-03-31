@@ -19,7 +19,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-// app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.set("views", path.join(__dirname, "views"));
@@ -35,6 +35,25 @@ mongoose
     console.log(err);
   });
 
+const reqAuth = async (req, res, next) => {
+    try {
+        const token = req.cookies.auth;
+        if (!token) {
+            return res.status(401).json({ error: "Unauthorized: No token provided" });
+        }
+        const decoded = jwt.verify(token, key);
+        const user = await User.findById(decoded.user._id);
+        if (!user) {
+            return res.status(401).json({ error: "Unauthorized: User not found" });
+        }
+        req.user = user;
+        next();
+    } catch (err) {
+        console.error("Authentication error:", err);
+        res.status(401).json({ error: "Unauthorized" });
+    }
+};
+
 //display Products
 // app.get("/products/:ctg", products.displayProducts);
 
@@ -42,6 +61,7 @@ mongoose
 app.get("/search", (req, res) => {
   res.render("search");
 });
+
 
 app.post("/searchResults", async (req, res) => {
   try {
@@ -128,6 +148,22 @@ app.post("/login", async (req, res) => {
 });
 
 //LOGOUT ROUTE
+app.post('/logout', reqAuth, (req, res) => {
+    try {
+        res.clearCookie('auth', {
+            httpOnly: true,
+            secure: true,
+            sameSite: "Lax"
+        });
+        console.log('Logout successful');
+        res.status(200).json({ message: 'Logout successful' });
+    } catch (err) {
+        console.error('Logout error:', err);
+        res.status(500).json({ error: 'Logout failed' });
+    }
+});
+
+
 
 app.use("/products", productRoutes);
 

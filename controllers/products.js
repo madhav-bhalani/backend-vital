@@ -13,9 +13,26 @@ module.exports.displayProducts = async (req, res) => {
   }
 };
 
-//add a new product
+
+// Add new product
 module.exports.addNewProduct = async (req, res) => {
   try {
-    const product = new Product(req.body.product);
-  } catch (err) {}
+    console.log(req.files);
+    console.log(req.body);
+
+    if (!req.files || !req.files.productImages) {
+      return res.status(400).json({ error: 'No valid images uploaded' });
+    }
+
+    const product = new Product(req.body);
+    product.images = req.files.productImages.map(f => ({ url: f.path, fileName: f.filename }));
+    
+    await product.save();
+    console.log(product);
+    res.status(200).json({ message: 'Product added successfully' });
+  } catch (err) {
+    console.log("ERROR IN ADDING PRODUCT");
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 };
