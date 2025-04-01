@@ -20,13 +20,19 @@ module.exports.addNewProduct = async (req, res) => {
     console.log(req.files);
     console.log(req.body);
 
-    if (!req.files || !req.files.productImages) {
+    if (!req.files) {
       return res.status(400).json({ error: 'No valid images uploaded' });
     }
 
+    const imageData = req.files.map(file => ({
+      url: file.path,
+      fileName: file.filename
+    }));
+
+    console.log("Image data :"+imageData);
     const product = new Product(req.body);
-    product.images = req.files.productImages.map(f => ({ url: f.path, fileName: f.filename }));
-    
+    product.images = imageData;
+
     await product.save();
     console.log(product);
     res.status(200).json({ message: 'Product added successfully' });
