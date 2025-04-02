@@ -5,9 +5,12 @@ const path = require("path");
 const Product = require("./models/products");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs')
+const swaggerDoc = YAML.load('./swagger.yaml');
 
 const productRoutes = require("./routes/products");
-const userRoutes = require("./routes/users");
+const userRoutes = require('./routes/users');
 
 const corsOptions = {
   origin: "http://localhost:5173", // Replace with your specific origin
@@ -19,8 +22,10 @@ const cookieParser = require("cookie-parser");
 
 app.use(cookieParser());
 app.use(cors(corsOptions));
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -57,6 +62,7 @@ const isAdmin = async (req, res, next) => {
 app.get("/search", (req, res) => {
   res.render("search");
 });
+
 
 app.post("/searchResults", async (req, res) => {
   try {

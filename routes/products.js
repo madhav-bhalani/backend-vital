@@ -19,8 +19,14 @@ const upload = multer({ storage: storage });
 //     },
 //   }).fields([{ name: "productImages", maxCount: 1 }]);
 
-router.get("/:ctg",products.displayProducts);
+router.get('/', products.allProducts);
 
-router.post('/new', upload.array('images'), products.addNewProduct);
+router.post('/', upload.array('images'), products.addNewProduct);
+
+
+
+router.get("/category/:ctg",products.displayProducts);
+
+router.get('/:id', products.displayById);
 
 module.exports = router;
