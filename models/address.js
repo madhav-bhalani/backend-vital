@@ -24,5 +24,15 @@ const addressSchema = new Schema({
             type: String,
             required: true
         }
-    }
-})
+    },
+    user: [
+        {
+            type: objectId,
+            ref: 'User'
+        }
+    ]
+});
+
+const Address = mongoose.model('Address', addressSchema);
+
+module.exports = Address;
