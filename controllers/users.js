@@ -7,29 +7,34 @@ const key = "santaClause90*32@@";
 
 module.exports.registerUser = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, password } = req.body;
-    const hash = await bcrypt.hash(password, 12);
-    const user = await User.findOne({
-      $or: [{ email: email }, { phone: phone }],
-    });
-    if (user) {
-      console.log("User already exists");
-      res.status(409).json({message: "User already exists"});
-    } else {
-      const newUser = new User({
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        phone: phone,
-        password: hash,
-      });
-      console.log(newUser);
-      await newUser.save();
-      // res.send('User added');
-      res.status(201).json({message: "User registered successfully"});
-      // res.redirect("http://localhost:5173/");
+    const { firstName, lastName, email, phone, password, confirmPass } = req.body;
+    if(password !== confirmPass){
+      res.status(400).json({message: "Please enter the same password as above"});
     }
-  } catch (err) {
+    else{
+      const hash = await bcrypt.hash(password, 12);
+      const user = await User.findOne({
+      $or: [{ email: email }, { phone: phone }],
+      });
+      if (user) {
+        console.log("User already exists");
+        res.status(409).json({message: "User already exists"});
+      } else {
+          const newUser = new User({
+          firstName: firstName,
+          lastName: lastName,
+          email: email,
+          phone: phone,
+          password: hash,
+        });
+        console.log(newUser);
+        await newUser.save();
+        // res.send('User added');
+        res.status(201).json({message: "User registered successfully"});
+        // res.redirect("http://localhost:5173/");
+      }
+    } 
+  }catch (err) {
     console.log("Error while registering user");
     console.log(err);
     // res.status(500).json({ error: "Regsitration failed!!" });
