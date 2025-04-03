@@ -27,6 +27,6 @@ router.get('/:id', products.displayById);
 
 router.get('/category/:ctg',products.displayProducts);
 
-// router.put('/:id', products.editProduct);
+router.put('/:id', products.editProduct);
 
 module.exports = router;

@@ -88,17 +88,18 @@ module.exports.editProduct = async (req, res) => {
     const productName = req.body.productName;
     const brandName = req.body.brandName;
     const category = req.body.category;
-    const description = req.body.productDetails.description;
-    const flavours = req.body.productDetails.flavours;
-    const colors = req.body.productDetails.colors;
-    const weight = req.body.sizes.weight;
-    const shirtSize = req.body.sizes.shirtSize;
-    const productPrice = req.body.price.productPrice;
-    const onSale = req.body.price.onSale;
+    const description = req.body.productDetails?.description;
+    const flavours = req.body.productDetails?.flavours;
+    const colors = req.body.productDetails?.colors;
+    const weight = req.body.sizes?.weight;
+    const shirtSize = req.body.sizes?.shirtSize;
+    const productPrice = req.body.price?.productPrice;
+    const onSale = req.body.price?.onSale;
     if(!ObjectId.isValid(id)){
       res.status(400).json({message: 'No such product exists'});
     }
     else{
+      console.log(req.body);
       const product = await Product.findByIdAndUpdate(id, {
         productName: productName,
         brandName: brandName,
