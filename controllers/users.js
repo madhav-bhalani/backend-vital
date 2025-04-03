@@ -7,6 +7,7 @@ const key = "santaClause90*32@@";
 
 module.exports.registerUser = async (req, res) => {
   try {
+    console.log('HG BODY ', req.body);
     const { firstName, lastName, email, phone, password, confirmPass } = req.body;
     if(password !== confirmPass){
       res.status(400).json({message: "Please enter the same password as above"});
