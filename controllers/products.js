@@ -1,16 +1,16 @@
 const Product = require("../models/products");
+const { ObjectId } = require('mongoose').Types;
 
 //display all products
  module.exports.allProducts = async (req, res) => {
   try{
     const products = await Product.find({});
-    const productCount = await Product.find({}).countDocuments();
-    if(productCount === 0) {
+    if(products.length  === 0) {
       return res.status(404).json({ message: "No products found" });
     }
     // console.log(products);
     else{
-      res.status(200).json({products, productCount});
+      res.status(200).json(products);
     }
   }
   catch(err){
@@ -75,6 +75,60 @@ module.exports.addNewProduct = async (req, res) => {
     console.log(product);
     res.status(200).json({ message: 'Product added successfully' });
   } catch (err) {
+    console.log("ERROR IN ADDING PRODUCT");
+    console.log(err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+// edit product
+module.exports.editProduct = async (req, res) => {
+  try{
+    const id = req.params.id;
+    const productName = req.body.productName;
+    const brandName = req.body.brandName;
+    const category = req.body.category;
+    const description = req.body.productDetails.description;
+    const flavours = req.body.productDetails.flavours;
+    const colors = req.body.productDetails.colors;
+    const weight = req.body.sizes.weight;
+    const shirtSize = req.body.sizes.shirtSize;
+    const productPrice = req.body.price.productPrice;
+    const onSale = req.body.price.onSale;
+    if(!ObjectId.isValid(id)){
+      res.status(400).json({message: 'No such product exists'});
+    }
+    else{
+      const product = await Product.findByIdAndUpdate(id, {
+        productName: productName,
+        brandName: brandName,
+        category: category,
+        productDetails: {
+          description: description,
+          flavours: flavours,
+          colors: colors
+        },
+        sizes: {
+          weight: weight,
+          shirtSize: shirtSize
+        },
+        price: {
+          productPrice: productPrice,
+          onSale: onSale        
+        }
+      }, {
+        runValidators: true,
+        new: true
+      });
+      if(!product){
+        res.status(404).json({message: 'no such product available'});
+      }
+      else{
+        res.status(200).json({message: 'product details updated successfully'});
+      }
+    }
+  }
+  catch(err){
     console.log("ERROR IN ADDING PRODUCT");
     console.log(err);
     res.status(500).json({ error: 'Internal Server Error' });

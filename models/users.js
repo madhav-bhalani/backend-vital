@@ -38,6 +38,10 @@ const userSchema = new Schema({
             ref: 'Order'
         }
     ]
+    // isAdmin: {
+    //     type: Boolean,
+    //     default: false
+    // } 
 });
 
 const User = mongoose.model('User', userSchema);

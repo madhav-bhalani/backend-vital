@@ -23,10 +23,10 @@ router.get('/', products.allProducts);
 
 router.post('/', upload.array('images'), products.addNewProduct);
 
-
-
-router.get("/category/:ctg",products.displayProducts);
-
 router.get('/:id', products.displayById);
+
+router.get('/category/:ctg',products.displayProducts);
+
+// router.put('/:id', products.editProduct);
 
 module.exports = router;

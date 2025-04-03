@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 const productSchema = new Schema({
   productName: {
     type: String,
-    required: true,
+    required: [true, 'Please specify a productName for the product'],
   },
   brandName: {
     type: String,
-    required: true,
+    required: [true, 'Please specify a brandName for the product'],
   },
   category: {
     type: String,
@@ -21,7 +21,7 @@ const productSchema = new Schema({
       "active-wear",
     ],
     lowercase: true,
-    required: true,
+    required: [true, 'Please specify a category for the product'],
   },
   productDetails: {
     description: {
@@ -79,8 +79,8 @@ const productSchema = new Schema({
   ],
   rating: {
     type: Number,
-    min: 0,
-    max: 5,
+    min: [0, 'Rating cannot be negative'],
+    max: [5, 'Rating should be between 0 and 5'],
     default: 0,
   },
   stock: {
@@ -90,7 +90,7 @@ const productSchema = new Schema({
     },
     quantity: {
       type: Number,
-      min: 0,
+      min: [0, 'quantity cannot be negative'],
       required: true,
     },
   },
@@ -98,7 +98,7 @@ const productSchema = new Schema({
     productPrice: {
       type: Number,
       required: true,
-      min: 0,
+      min: [0, 'price cannot be negative'],
     },
     onSale: {
       type: Boolean,
