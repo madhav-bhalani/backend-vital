@@ -42,7 +42,6 @@ module.exports.registerUser = async (req, res) => {
   }
 }
 
-
 module.exports.loginUser = async (req, res, next) => {
     try {
       const { username, password } = req.body;
@@ -79,7 +78,6 @@ module.exports.loginUser = async (req, res, next) => {
     }
 }
 
-
 module.exports.logoutUser = async (req, res, next) => {
     try {
       res.clearCookie("auth", {
@@ -93,4 +91,22 @@ module.exports.logoutUser = async (req, res, next) => {
       console.error("Logout error:", err);
       res.status(500).json({ error: "Logout failed" });
     }
+}
+
+module.exports.displayUser = async (req, res) => {
+  try{
+    const id = req.params.id;
+    const user = await User.findById(id);
+    if(!user){
+      return res.status(404).json({ message: "No such user exists" });
+    }
+    else{
+      res.status(200).json(user);
+    }
+  }
+  catch(err){
+    console.log("ERROR IN FETCHING USER DATA");
+    console.log(err);
+    res.status(404).json({ error: "Unable to find user" });
+  }
 }

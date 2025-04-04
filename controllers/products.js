@@ -83,7 +83,8 @@ module.exports.addNewProduct = async (req, res) => {
 module.exports.editProduct = async (req, res) => {
   try {
     console.log('HG body', req.body);
-    const id = req.body.id;
+    const id = req.params.id;
+    console.log(id);
     const productName = req.body.productName;
     const brandName = req.body.brandName;
     const category = req.body.category;
