@@ -29,4 +29,6 @@ router.get("/category/:ctg", products.displayProducts);
 
 router.put("/:id", products.editProduct);
 
+router.delete("/:id", products.deleteProduct);
+
 module.exports = router;

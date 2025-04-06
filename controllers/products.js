@@ -138,3 +138,23 @@ module.exports.editProduct = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+module.exports.deleteProduct = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if (!ObjectId.isValid(id)) {
+      res.status(400).json({ message: "No such product exists" });
+    } else {
+      const product = await Product.findByIdAndDelete(id);
+      if (!product) {
+        res.status(404).json({ message: "no such product available" });
+      } else {
+        res.status(200).json({ message: "product deleted successfully" });
+      }
+    }
+  } catch (err) {
+    console.log("ERROR IN DELETING PRODUCT");
+    console.log(err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
