@@ -82,19 +82,20 @@ module.exports.addNewProduct = async (req, res) => {
 // edit product
 module.exports.editProduct = async (req, res) => {
   try {
-    console.log('HG body', req.body);
+    console.log("HG body", req.body);
     const id = req.params.id;
     console.log(id);
+    // console.log(req.body);
     const productName = req.body.productName;
     const brandName = req.body.brandName;
     const category = req.body.category;
-    const description = req.body.productDetails?.description;
-    const flavours = req.body.productDetails?.flavours;
-    const colors = req.body.productDetails?.colors;
-    const weight = req.body.sizes?.weight;
-    const shirtSize = req.body.sizes?.shirtSize;
-    const productPrice = req.body.price?.productPrice;
-    const onSale = req.body.price?.onSale;
+    const description = req.body["productDetails.description"];
+    const flavours = req.body["productDetails.flavours"];
+    const colors = req.body["productDetails.colors"];
+    const weight = req.body["sizes.weight"];
+    const shirtSize = req.body["sizes.shirtSize"];
+    const productPrice = parseInt(req.body["price.productPrice"]);
+    const onSale = req.body["price.onSale"];
     if (!ObjectId.isValid(id)) {
       res.status(400).json({ message: "No such product exists" });
     } else {

@@ -21,11 +21,7 @@ const upload = multer({ storage: storage });
 
 router.get("/", products.allProducts);
 
-router.post(
-  "/",
-  upload.array("images"),
-  products.addNewProduct
-);
+router.post("/", upload.array("images"), products.addNewProduct);
 
 router.get("/:id", products.displayById);
 
