@@ -66,7 +66,16 @@ module.exports.loginUser = async (req, res, next) => {
               sameSite: "Lax",
               // expires: new Date(Date.now() * 50000)
             });
-            res.json({ message: "Logged in!!", token, user });
+            res.json({ 
+              message: "Logged in!!", 
+              token, 
+              user: {
+              _id: user._id,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              isAdmin: user.isAdmin
+              } 
+            });
           });
         } else {
           res.send("please enter a correct password");
@@ -96,6 +105,11 @@ module.exports.logoutUser = async (req, res, next) => {
 module.exports.displayUser = async (req, res) => {
   try{
     const id = req.params.id;
+
+    if (req.user._id.toString() !== id) {
+      return res.status(403).json({ error: "Forbidden: Access denied" });
+    }
+
     const user = await User.findById(id);
     if(!user){
       return res.status(404).json({ message: "No such user exists" });
@@ -110,3 +124,12 @@ module.exports.displayUser = async (req, res) => {
     res.status(404).json({ error: "Unable to find user" });
   }
 }
+
+// module.exports.editUser = async (req,res) => {
+//   try{
+//     const id = req.params.id;
+
+//   } catch(err){
+
+//   }
+// };

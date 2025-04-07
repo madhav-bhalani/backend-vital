@@ -37,11 +37,11 @@ const userSchema = new Schema({
             type: objectId,
             ref: 'Order'
         }
-    ]
-    // isAdmin: {
-    //     type: Boolean,
-    //     default: false
-    // } 
+    ],
+    isAdmin: {
+        type: Boolean,
+        default: false
+    } 
 });
 
 const User = mongoose.model('User', userSchema);
