@@ -40,20 +40,7 @@ mongoose
     console.log(err);
   });
 
-//check if user is admin
-const isAdmin = async (req, res, next) => {
-  try {
-    const { email, phone } = req.user;
-    if (email === "admin@admin.com" && phone === "123456790") {
-      next();
-    } else {
-      res.status(403).json({ error: "Forbidden: Admin access required" });
-    }
-  } catch (err) {
-    console.error("Authorization error:", err);
-    res.status(500).json({ error: "Internal Server Error" });
-  }
-};
+
 
 //display Products
 // app.get("/products/:ctg", products.displayProducts);

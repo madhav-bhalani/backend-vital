@@ -96,6 +96,8 @@ module.exports.editProduct = async (req, res) => {
     const shirtSize = req.body["sizes.shirtSize"];
     const productPrice = parseInt(req.body["price.productPrice"]);
     const onSale = req.body["price.onSale"];
+    console.log("HG category: ", category);
+    console.log("HG price: ",productPrice);
     if (!ObjectId.isValid(id)) {
       res.status(400).json({ message: "No such product exists" });
     } else {

@@ -3,6 +3,7 @@ const router = express.Router();
 const products = require("../controllers/products");
 const multer = require("multer");
 const { storage } = require("../cloudinary/index");
+const {reqAuth, isAdmin} = require("../middlewares/auth");
 
 const upload = multer({ storage: storage });
 
@@ -21,14 +22,14 @@ const upload = multer({ storage: storage });
 
 router.get("/", products.allProducts);
 
-router.post("/", upload.array("images"), products.addNewProduct);
+router.post("/", reqAuth, isAdmin, upload.array("images"), products.addNewProduct);
 
 router.get("/:id", products.displayById);
 
 router.get("/category/:ctg", products.displayProducts);
 
-router.put("/:id", products.editProduct);
+router.put("/:id", reqAuth, isAdmin, products.editProduct);
 
-router.delete("/:id", products.deleteProduct);
+router.delete("/:id", reqAuth, isAdmin,  products.deleteProduct);
 
 module.exports = router;

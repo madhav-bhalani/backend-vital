@@ -20,4 +20,20 @@ module.exports.reqAuth = async (req, res, next) => {
       console.error("Authentication error:", err);
       res.status(401).json({ error: "Unauthorized" });
     }
-  };
+};
+
+//check if user is admin
+module.exports.isAdmin = async (req, res, next) => {
+  try {
+    if(!req.user.isAdmin){
+      return res.status(403).json({ error: "Forbidden: Access denied" });
+    }
+    else{
+      next();
+    }
+  }
+  catch(err){
+    console.error("Authorization error:", err);
+    res.status(401).json({ error: "Unauthorized" });
+  }
+};
