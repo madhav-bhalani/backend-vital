@@ -8,7 +8,7 @@ const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
 const swaggerDoc = YAML.load("./swagger.yaml");
-
+const reqAuth = require("./middlewares/auth").reqAuth;
 const productRoutes = require("./routes/products");
 const userRoutes = require("./routes/users");
 const addressRoutes = require("./routes/address");
@@ -41,8 +41,6 @@ mongoose
     console.log(err);
   });
 
-
-
 //display Products
 // app.get("/products/:ctg", products.displayProducts);
 
@@ -65,6 +63,15 @@ app.post("/searchResults", async (req, res) => {
     res.render("searchResults", { results });
   } catch (err) {
     console.log("Error while searching: ");
+    console.log(err);
+  }
+});
+
+app.post("/auth", reqAuth, async (req, res) => {
+  try {
+    res.status(200).json({ user: req.user });
+  } catch (err) {
+    console.log("Error while authenticating user: ");
     console.log(err);
   }
 });

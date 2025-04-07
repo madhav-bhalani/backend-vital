@@ -131,48 +131,70 @@ module.exports.editUser = async (req, res) => {
     if (req.user._id.toString() !== id) {
       return res.status(403).json({ error: "Forbidden: Access denied" });
     }
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
+
+    const userDetails = {};
+
+    if (req.body.firstName) {
+      userDetails.firstName = req.body.firstName;
+    }
+
+    if (req.body.lastName) {
+      userDetails.lastName = req.body.lastName;
+    }
+
+    const loggedInUser = await User.findById(id);
+
     const email = req.body.email;
+
+    if (email) {
+      const foundUser = await User.findOne({ email: email });
+
+      if (foundUser && foundUser.email !== loggedInUser.email) {
+        return res
+          .status(409)
+          .json({ message: "Email already in use by another user" });
+      } else {
+        userDetails.email = email;
+      }
+    }
+
     const phone = req.body.phone;
+
+    if (phone) {
+      const foundUser = await User.findOne({ phone: phone });
+      if (foundUser && foundUser.phone !== loggedInUser.phone) {
+        return res
+          .status(409)
+          .json({ message: "Phone number already in use by another user" });
+      } else {
+        userDetails.phone = phone;
+      }
+    }
+
     const newPass = req.body.newPass;
     const password = req.body.password;
 
-    const foundUser = await User.findOne({
-      $or: [{ email: email }, { phone: phone }],
-    });
-    if (foundUser) {
-      res.status(409).json({ message: "Email or phone number already in use" });
-    } else {
-      if (password !== newPass) {
-        res
-          .status(400)
-          .json({ message: "Please enter the same password in both places" });
+    if (newPass && password) {
+      if (newPass !== password) {
+        res.status(400).json({
+          message: "Please enter the same password in both places",
+        });
       } else {
-        const hash = await bcrypt.hash(password, 12);
-        const user = await User.findByIdAndUpdate(
-          id,
-          {
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            phone: phone,
-            password: hash,
-          },
-          {
-            runValidators: true,
-            new: true,
-          }
-        );
-        if (!user) {
-          res.status(404).json({ message: "no such user exists" });
-        } else {
-          res
-            .status(201)
-            .json({ message: "User details updated successfully", user });
-        }
-        // console.log(user);
+        const hash = await bcrypt.hash(newPass, 12);
+        userDetails.password = hash;
       }
+    }
+
+    const user = await User.findByIdAndUpdate(id, userDetails, {
+      runValidators: true,
+      new: true,
+    });
+    if (!user) {
+      res.status(404).json({ message: "no such user exists" });
+    } else {
+      res
+        .status(201)
+        .json({ message: "User details updated successfully", user });
     }
   } catch (err) {
     console.log("ERROR IN UPDATING USER DETAILS");
