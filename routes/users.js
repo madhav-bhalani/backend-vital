@@ -14,4 +14,6 @@ router.post("/logout", reqAuth, users.logoutUser);
 
 router.get("/user/:id", reqAuth, users.displayUser);
 
+router.put("/user/:id", reqAuth, users.editUser);
+
 module.exports = router; 
