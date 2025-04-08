@@ -4,7 +4,7 @@ const key = "santaClause90*32@@";
 
 module.exports.reqAuth = async (req, res, next) => {
     try {
-      console.log(req.cookies);
+      console.log('cookies in reqAuth middleware: ', req.cookies);
       const token = req.cookies.auth;
       if (!token) {
         return res.status(401).json({ error: "Unauthorized: No token provided" });
