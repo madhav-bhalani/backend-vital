@@ -6,7 +6,8 @@ const shoppingSchema = new Schema({
   userId: {
     type: objectId,
     ref: "User",
-    required: false,
+    required: true,
+    unique: true
   },
   cartItems: [
     {
