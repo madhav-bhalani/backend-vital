@@ -37,3 +37,24 @@ module.exports.addItems = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+module.exports.getCartItems = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const shopping = await Shopping.findOne({ userId: userId }).populate(
+      "cartItems.productId"
+    );
+    if (shopping) {
+      res.status(200).json({
+        message: "Your shopping cart details",
+        cartItems: shopping.cartItems,
+      });
+      console.log("cart items: ", shopping.cartItems);
+    } else {
+      res.status(404).json({ message: "No cart found for this user" });
+    }
+  } catch (err) {
+    console.log("Error while getting cart items: ", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
