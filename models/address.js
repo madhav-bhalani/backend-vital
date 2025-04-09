@@ -35,9 +35,13 @@ const addressSchema = new Schema({
     required: true,
   },
   user: {
-      type: objectId,
-      ref: "User",
-  }
+    type: objectId,
+    ref: "User",
+  },
+  isDefault: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const Address = mongoose.model("Address", addressSchema);
