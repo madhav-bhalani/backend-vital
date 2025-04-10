@@ -7,4 +7,6 @@ router.post("/shopping/cart", reqAuth, shopping.addItems);
 
 router.get("/shopping/cart", reqAuth, shopping.getCartItems); 
 
+router.delete("/shopping/cart/:id", reqAuth, shopping.removeCartItem);
+
 module.exports = router;
