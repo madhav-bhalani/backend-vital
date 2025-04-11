@@ -13,6 +13,7 @@ const productRoutes = require("./routes/products");
 const userRoutes = require("./routes/users");
 const addressRoutes = require("./routes/address");
 const shoppingRoutes = require("./routes/shopping");
+const orderRoutes = require("./routes/orders");
 
 const corsOptions = {
   origin: "http://localhost:5173", // Replace with your specific origin
@@ -81,6 +82,7 @@ app.use("/products", productRoutes);
 app.use("/", userRoutes);
 app.use("/", addressRoutes);
 app.use("/", shoppingRoutes);
+app.use("/", orderRoutes);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

@@ -48,6 +48,7 @@ module.exports.getCartItems = async (req, res) => {
       res.status(200).json({
         message: "Your shopping cart details",
         cartItems: shopping.cartItems,
+        cartId: shopping._id,
       });
       console.log("cart items: ", shopping.cartItems);
     } else {
