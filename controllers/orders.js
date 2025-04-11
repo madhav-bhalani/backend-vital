@@ -1,5 +1,4 @@
 const Order = require("../models/orders");
-const Product = require("../models/products");
 const Shopping = require("../models/shopping");
 const User = require("../models/users");
 
@@ -83,7 +82,7 @@ module.exports.getOrders = async (req, res) => {
           .json({ message: "Orders fetched successfully", orders });
       }
     } else {
-      const orders = await Order.find({ user: userId }).populate("products");
+      const orders = await Order.find({ user: userId });
       if (!orders || orders.length === 0) {
         return res.status(404).json({ message: "No orders found" });
       } else {
@@ -97,3 +96,19 @@ module.exports.getOrders = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+module.exports.getOrderDetails = async (req, res) => {
+    try{
+        const orderId = req.body.orderId;
+        const order = await Order.findById(orderId).populate('products');
+        if(!order){
+            res.status(404).json({message: 'No order found'});
+        }
+        else{
+            res.status(200).json({message: 'order detailes fetched successfully', order})
+        }
+    }catch(err){
+        console.log('Error in fetching order details', err);
+        res.status(500).json({error: 'Internal Server Error'});
+    }
+}

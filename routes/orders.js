@@ -9,4 +9,6 @@ router.get("/orders", reqAuth,  order.getOrders);
 
 router.post("/orders/changeStatus", reqAuth, isAdmin, order.changeOrderStatus);
 
+router.get("/orders/details", reqAuth, order.getOrderDetails);
+
 module.exports = router;
