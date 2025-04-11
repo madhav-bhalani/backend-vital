@@ -5,6 +5,8 @@ const { reqAuth, isAdmin } = require("../middlewares/auth");
 
 router.post("/orders/place", reqAuth, order.placeOrder);
 
+router.get("/orders", reqAuth,  order.getOrders);
+
 router.post("/orders/changeStatus", reqAuth, isAdmin, order.changeOrderStatus);
 
 module.exports = router;
