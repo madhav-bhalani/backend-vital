@@ -97,7 +97,7 @@ module.exports.getOrders = async (req, res) => {
     const userId = req.user._id;
     const user = await User.findById(userId);
     if (user.isAdmin === true) {
-      const orders = await Order.find({}).populate("user");
+      const orders = await Order.find({}).populate("user").populate("orderItems.productId");
       if (!orders || orders.length === 0) {
         return res.status(404).json({ message: "No orders found" });
       } else {
@@ -106,7 +106,7 @@ module.exports.getOrders = async (req, res) => {
           .json(orders);
       }
     } else {
-      const orders = await Order.find({ user: userId });
+      const orders = await Order.find({ user: userId }).populate("user").populate("orderItems.productId");
       if (!orders || orders.length === 0) {
         return res.status(404).json({ message: "No orders found" });
       } else {
