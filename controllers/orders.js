@@ -5,31 +5,55 @@ const User = require("../models/users");
 module.exports.placeOrder = async (req, res) => {
   try {
     const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    // Find the shopping cart for the user and populate cart items
     const shopping = await Shopping.findOne({ userId: userId }).populate(
       "cartItems.productId"
     );
-    console.log("HG cart items: ", shopping);
+
+    console.log("Cart items: ", shopping);
     const cartItems = shopping.cartItems;
+
+    // Check if the cart is empty
     if (cartItems.length === 0) {
       return res
         .status(404)
         .json({ message: "No items in cart to place order" });
     } else {
-      const products = cartItems.map((item) => item.productId._id);
+      // Map cart items to the orderItems structure
+      const orderItems = cartItems.map((item) => ({
+        productId: item.productId._id,
+        itemQuantity: item.itemQuantity,
+      }));
+
+      // Calculate the total order amount
       const orderAmount = cartItems.reduce((total, item) => {
-        // console.log('price: ', item.productId.price);
         return total + item.productId.price?.productPrice * item.itemQuantity;
       }, 0);
+
+      // Create a new order
       const order = new Order({
-        products: products,
+        orderItems: orderItems, // Use the mapped orderItems
         user: userId,
         orderStatus: "placed",
         orderAmount: orderAmount,
       });
+
+      // Save the order
       await order.save();
+
+      // Link the order to the user
+      user.orders.push(order._id);
+      await user.save();
+      console.log("Linked order ID with user successfully!");
+
+      // Clear the shopping cart
       shopping.cartItems = [];
       await shopping.save();
-      console.log("cart after order:", shopping);
+      console.log("Cart after order:", shopping);
+
+      // Respond with success
       res.status(201).json({ message: "Order placed successfully", order });
     }
   } catch (err) {
@@ -73,13 +97,13 @@ module.exports.getOrders = async (req, res) => {
     const userId = req.user._id;
     const user = await User.findById(userId);
     if (user.isAdmin === true) {
-      const orders = await Order.find({});
+      const orders = await Order.find({}).populate("user");
       if (!orders || orders.length === 0) {
         return res.status(404).json({ message: "No orders found" });
       } else {
         res
           .status(200)
-          .json({ message: "Orders fetched successfully", orders });
+          .json(orders);
       }
     } else {
       const orders = await Order.find({ user: userId });
@@ -88,7 +112,7 @@ module.exports.getOrders = async (req, res) => {
       } else {
         res
           .status(200)
-          .json({ message: "Orders fetched successfully", orders });
+          .json(orders);
       }
     }
   } catch (err) {
@@ -100,7 +124,9 @@ module.exports.getOrders = async (req, res) => {
 module.exports.getOrderDetails = async (req, res) => {
     try{
         const orderId = req.body.orderId;
-        const order = await Order.findById(orderId).populate('products');
+        const order = await Order.findById(orderId).populate('orderItems.productId');
+
+
         if(!order){
             res.status(404).json({message: 'No order found'});
         }
