@@ -26,12 +26,6 @@ const userSchema = new Schema({
         required: [true, 'Password is required'],
         min: [8, 'Password should be atleast 8 characters']
     },
-    addresses: [
-        {
-            type: objectId,
-            ref: 'Address'
-        }
-    ],
     orders: [
         {
             type: objectId,

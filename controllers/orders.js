@@ -6,7 +6,7 @@ module.exports.placeOrder = async (req, res) => {
   try {
     const userId = req.user._id;
     const user = await User.findById(userId);
-
+    const shippingAddress = req.body.address;
     // Find the shopping cart for the user and populate cart items
     const shopping = await Shopping.findOne({ userId: userId }).populate(
       "cartItems.productId"
@@ -38,6 +38,7 @@ module.exports.placeOrder = async (req, res) => {
         user: userId,
         orderStatus: "placed",
         orderAmount: orderAmount,
+        shippingAddress: shippingAddress
       });
 
       // Save the order

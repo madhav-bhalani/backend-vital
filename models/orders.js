@@ -34,6 +34,11 @@ const orderSchema = new Schema ({
     createdAt:{
         type: Date,
         default: Date.now 
+    },
+    shippingAddress:{
+        type: objectId,
+        ref: 'Address',
+        required: true
     }
 });
 
