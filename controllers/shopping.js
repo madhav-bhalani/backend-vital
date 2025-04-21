@@ -61,26 +61,25 @@ module.exports.getCartItems = async (req, res) => {
   }
 };
 
-
 module.exports.removeCartItem = async (req, res) => {
-  try{
-    const userId = req.user._id
+  try {
+    const userId = req.user._id;
     const id = req.params.id;
-    console.log('productId: ', id);
-  
-    const shopping = await Shopping.findOne({userId: userId});
+    console.log("productId: ", id);
+
+    const shopping = await Shopping.findOne({ userId: userId });
 
     if (shopping) {
       const existingItem = shopping.cartItems.find((item) => {
-      return item.productId.toString() === id.toString();
+        return item.productId.toString() === id.toString();
       });
 
       if (!existingItem) {
-      return res.status(404).json({ message: "No such product in cart" });
+        return res.status(404).json({ message: "No such product in cart" });
       }
 
       const cartItems = shopping.cartItems.filter((item) => {
-      return item.productId.toString() !== id.toString();
+        return item.productId.toString() !== id.toString();
       });
       shopping.cartItems = cartItems;
       await shopping.save();
@@ -88,32 +87,34 @@ module.exports.removeCartItem = async (req, res) => {
     } else {
       res.status(404).json({ message: "No cart found for this user" });
     }
-  } catch(err){
+  } catch (err) {
     console.log("Error while removing cart item: ", err);
-    res.status(500).json({error: "Internal Server Error"});
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-module.exports.checkout = async(req,res) => {
-  try{
-  const userId = req.user._id;
-  const user = await User.findById(userId).populate('orders').populate('addresses');
-  const shopping = await Shopping.findOne({userId: userId}).populate("cartItems.productId");
-  if(shopping && user){
-    res.status(200).json({
-      message: 'your checkout info',
-      cartItems: shopping.cartItems,
-      cartId: shopping._id,
-      user
+module.exports.checkout = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.find({ _id: userId })
+      .populate("orders")
+      .populate("addresses");
+    const shopping = await Shopping.findOne({ userId: userId }).populate(
+      "cartItems.productId"
+    );
+    if (shopping && user) {
+      res.status(200).json({
+        message: "your checkout info",
+        cartItems: shopping.cartItems,
+        cartId: shopping._id,
+        userData: user,
+      });
+      // console.log('HG items: ', shopping.cartItems);
+    } else {
+      res.status(404).json({ message: "No data for this user" });
     }
-    
-  )
-  // console.log('HG items: ', shopping.cartItems);
-  }else {
-    res.status(404).json({ message: "No data for this user" });
+  } catch (err) {
+    console.log("Error while getting cart items: ", err);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}catch (err) {
-  console.log("Error while getting cart items: ", err);
-  res.status(500).json({ error: "Internal Server Error" });
-}
-}
+};

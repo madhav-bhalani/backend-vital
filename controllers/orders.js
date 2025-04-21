@@ -38,7 +38,7 @@ module.exports.placeOrder = async (req, res) => {
         user: userId,
         orderStatus: "placed",
         orderAmount: orderAmount,
-        shippingAddress: shippingAddress
+        shippingAddress: shippingAddress,
       });
 
       // Save the order
@@ -98,22 +98,22 @@ module.exports.getOrders = async (req, res) => {
     const userId = req.user._id;
     const user = await User.findById(userId);
     if (user.isAdmin === true) {
-      const orders = await Order.find({}).populate("user").populate("orderItems.productId");
+      const orders = await Order.find({})
+        .populate("user")
+        .populate("orderItems.productId");
       if (!orders || orders.length === 0) {
         return res.status(404).json({ message: "No orders found" });
       } else {
-        res
-          .status(200)
-          .json(orders);
+        res.status(200).json(orders);
       }
     } else {
-      const orders = await Order.find({ user: userId }).populate("user").populate("orderItems.productId");
+      const orders = await Order.find({ user: userId })
+        .populate("user")
+        .populate("orderItems.productId");
       if (!orders || orders.length === 0) {
         return res.status(404).json({ message: "No orders found" });
       } else {
-        res
-          .status(200)
-          .json(orders);
+        res.status(200).json(orders);
       }
     }
   } catch (err) {
@@ -123,19 +123,25 @@ module.exports.getOrders = async (req, res) => {
 };
 
 module.exports.getOrderDetails = async (req, res) => {
-    try{
-        const orderId = req.body.orderId;
-        const order = await Order.findById(orderId).populate('orderItems.productId');
-
-
-        if(!order){
-            res.status(404).json({message: 'No order found'});
-        }
-        else{
-            res.status(200).json({message: 'order detailes fetched successfully', order})
-        }
-    }catch(err){
-        console.log('Error in fetching order details', err);
-        res.status(500).json({error: 'Internal Server Error'});
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    const orderId = req.params.orderId;
+    const order = await Order.findById(orderId).populate("shippingAddress")
+      .populate("orderItems.productId")
+      .populate("user");
+    if (!order) {
+      res.status(404).json({ message: "No order found" });
+    } else if(user.isAdmin === true || order.user._id.toString() === userId.toString()) {
+      res
+        .status(200)
+        .json({ message: "order detailes fetched successfully", order });
     }
-}
+    else {
+      res.status(403).json({ message: "Forbidden: Access denied" });
+    }
+  } catch (err) {
+    console.log("Error in fetching order details", err);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
