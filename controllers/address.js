@@ -18,27 +18,25 @@ module.exports.addNewAddress = async (req, res) => {
 
 module.exports.editAddress = async (req, res) => {
   try {
-    const userId = req.user._id;
-    const addressId = req.body.id;
-    const user = await User.findById(userId);
-    const address = await Address.findById(addressId);
-    if (!address) {
-      res.status(404).json({ message: "address not found" });
-    } else if (userId.toString() !== address.userId.toString()) {
-      res
-        .status(403)
-        .json({ message: "you are not authorized to edit this address" });
-    } else {
-      const updatedAddress = await Address.findByIdAndUpdate(
-        addressId,
-        req.body,
-        { new: true, runValidators: true }
-      );
-      res.status(200).json({ message: "address updated!!", updatedAddress });
+    const { id, ...updateData } = req.body; // Extract `id` from the request body
+    if (!id) {
+      return res.status(400).json({ message: "Address ID is required" });
     }
+
+    const address = await Address.findById(id);
+    if (!address) {
+      return res.status(404).json({ message: "Address not found" });
+    }
+
+    const updatedAddress = await Address.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    res.status(200).json({ message: "Address updated!", updatedAddress });
   } catch (err) {
-    console.log(err);
-    res.status(400).json({ error: err });
+    console.error(err);
+    res.status(400).json({ error: err.message });
   }
 };
 
