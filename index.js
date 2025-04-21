@@ -81,7 +81,7 @@ app.post("/auth", reqAuth, async (req, res) => {
 app.use("/products", productRoutes);
 app.use("/", userRoutes);
 app.use("/", addressRoutes);
-app.use("/", shoppingRoutes);
+app.use("/shopping", shoppingRoutes);
 app.use("/", orderRoutes);
 
 app.listen(port, () => {

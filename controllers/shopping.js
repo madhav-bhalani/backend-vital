@@ -1,4 +1,5 @@
 const Shopping = require("../models/shopping");
+const User = require("../models/users");
 
 module.exports.addItems = async (req, res) => {
   try {
@@ -91,4 +92,28 @@ module.exports.removeCartItem = async (req, res) => {
     console.log("Error while removing cart item: ", err);
     res.status(500).json({error: "Internal Server Error"});
   }
+};
+
+module.exports.checkout = async(req,res) => {
+  try{
+  const userId = req.user._id;
+  const user = await User.findById(userId).populate('orders').populate('addresses');
+  const shopping = await Shopping.findOne({userId: userId}).populate("cartItems.productId");
+  if(shopping && user){
+    res.status(200).json({
+      message: 'your checkout info',
+      cartItems: shopping.cartItems,
+      cartId: shopping._id,
+      user
+    }
+    
+  )
+  // console.log('HG items: ', shopping.cartItems);
+  }else {
+    res.status(404).json({ message: "No data for this user" });
+  }
+}catch (err) {
+  console.log("Error while getting cart items: ", err);
+  res.status(500).json({ error: "Internal Server Error" });
+}
 }
