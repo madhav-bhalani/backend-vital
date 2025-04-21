@@ -35,7 +35,13 @@ const userSchema = new Schema({
     isAdmin: {
         type: Boolean,
         default: false
-    } 
+    },
+    addresses: [
+        {
+            type: objectId,
+            ref: 'Address'
+        }
+    ] 
 });
 
 const User = mongoose.model('User', userSchema);

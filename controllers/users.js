@@ -111,7 +111,7 @@ module.exports.displayUser = async (req, res) => {
       return res.status(403).json({ error: "Forbidden: Access denied" });
     }
 
-    const user = await User.findById(id);
+    const user = await User.findById(id).populate('addresses');
     if (!user) {
       return res.status(404).json({ message: "No such user exists" });
     } else {

@@ -4,8 +4,11 @@ const User = require("../models/users");
 module.exports.addNewAddress = async(req,res)=>{
     try{
         const userId = req.user._id;
+        const user = await User.findById(userId);
         const address = new Address ({userId: userId, ...req.body});
         await address.save();
+        user.addresses.push(address._id);
+        await user.save();
         res.status(200).json({message: 'address added!!', address});
     }catch(err){    
         console.log(err);
@@ -16,13 +19,26 @@ module.exports.addNewAddress = async(req,res)=>{
 module.exports.getAddress = async(req,res)=>{
     try{
         const userId = req.user._id;
-        const addresses = await Address.find({userId: userId});
-        if(!addresses ||addresses.length === 0){
-            res.status(404).json({message: 'no addresses found'});
+        const user = await User.findById(userId);
+        if(!user.isAdmin){
+            const addresses = await Address.find({userId: userId});
+            if(!addresses ||addresses.length === 0){
+                res.status(404).json({message: 'no addresses found'});
+            }
+            else{
+                res.status(200).json(addresses);
+            }
         }
         else{
-            res.status(200).json(addresses);
+            const addresses = await Address.find({});
+            if(!addresses ||addresses.length === 0){
+                res.status(404).json({message: 'no addresses found'});
+            }
+            else{
+                res.status(200).json(addresses);
+            }
         }
+
     }catch(err){
         console.log(err);
         res.status(400).json({error: err});
